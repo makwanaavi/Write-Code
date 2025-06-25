@@ -42,7 +42,7 @@ const Login = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading] = useState(false);
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -52,7 +52,6 @@ const Login = () => {
       redirect: false,
     });
     if (result?.error) {
-      setisLoading(true);
       toast.error(result?.error);
     } else {
       router.push("/dashboard");
@@ -99,7 +98,7 @@ const Login = () => {
                     {...field}
                     disabled={isLoading}
                     type="password"
-                    value={field.value ?? " "}
+                    value={field.value ?? ""}
                   />
                 </FormControl>
                 <FormMessage />
