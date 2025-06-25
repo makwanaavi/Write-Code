@@ -3,7 +3,7 @@ import { TypeAnimation } from "react-type-animation";
 
 const Textanimation = () => {
     return (
-        <div className="mx-auto text-2xl lg:text-5xl my-6 flex-col gap-3 lg:gap-5 font-bold text-center">
+        <div className="mx-auto text-xl lg:text-5xl my-6 flex-col gap-3 lg:gap-5 font-bold text-center">
             <div className="tex">Build Your Cureer</div>
             <div className="w-fit mx-auto text-center">
                 <TypeAnimation
