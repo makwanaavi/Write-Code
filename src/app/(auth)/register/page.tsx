@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
-  //   FormDescription,
+  // FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,7 +15,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
-// import { file } from "zod/v4-mini";
+// import axios from "axios";
+import Axios from "@/lib/Axios";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const formSchema = z
   .object({
@@ -43,13 +46,38 @@ const Register = () => {
   });
 
   const [isLoading, setisLoading] = useState(false);
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // localStorage.setItem("User Data", JSON.stringify(values))
-    setisLoading(true);
-    setTimeout(() => {
-      setisLoading(false);
-    }, 2000);
+  const router = useRouter()
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    const playload = {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+    };
+
+    try {
+      setisLoading(true);
+      const response = await Axios.post("/api/auth/register", playload);
+
+      if (response.status === 201) {
+        toast.success(response.data.message)
+        form.reset();
+        router.push("/login")
+      }
+
+      console.log(response);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error : any) {
+      toast.error(error?.response?.data?.error)
+    }finally{
+      setisLoading(false)
+      }
+    // localStorage.setItem("User Data", JSON.stringify(values))
+    // setisLoading(true);
+    // setTimeout(() => {
+    //   setisLoading(false);
+    // }, 2000);
+    // console.log(values);
   }
 
   return (
@@ -143,15 +171,18 @@ const Register = () => {
             type="submit"
             className="w-full cursor-pointer text-white"
           >
-            {isLoading ? "Loading..." : "Create Account"    }
+            {isLoading ? "Loading..." : "Create Account"}
           </Button>
         </form>
-        
       </Form>
 
       <div className="max-w-md mx-auto">
-        <p>Already Have Account? 
-            <Link href={'/login'} className="text-primary drop-shadow-2xl"> Login</Link>
+        <p>
+          Already Have Account?
+          <Link href={"/login"} className="text-primary drop-shadow-2xl">
+            {" "}
+            Login
+          </Link>
         </p>
       </div>
     </div>
