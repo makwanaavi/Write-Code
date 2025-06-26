@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
     const URL = `${DOMAIN}/reset-password?token=${token}`;
 
     //sending email
-    const emailResult = await sendEmail(
+    await sendEmail(
       exituser.email,
       "Forgot Password from one Editor",
       ForgotPasswordeEmail({
@@ -47,16 +47,6 @@ export async function POST(request: NextRequest) {
         url: URL,
       })
     );
-    console.log("Email send result:", emailResult);
-
-    if (emailResult && emailResult.name === "Error") {
-      return NextResponse.json(
-        {
-          error: "Failed to send email. Please try again later.",
-        },
-        { status: 500 }
-      );
-    }
 
     return NextResponse.json(
       {

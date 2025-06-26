@@ -11,7 +11,7 @@ export function ForgotPasswordeEmail({ name, url }: EmailTemplateProps) {
       <h1>Welcome, {name}!</h1>
       <p>
         reset password :
-        <a href={url} target="_blank" rel="noopener noreferrer">
+        <a href={url} target="_blank">
           Click Here
         </a>
         to reset.
