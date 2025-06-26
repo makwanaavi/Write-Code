@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-// import { buffer } from "stream/consumers";
 
-const MONGODB_URL = process.env.MONGODB_URL
+const MONGODB_URL = process.env.MONGODB_URL;
 
 if (!MONGODB_URL) {
-    throw new Error("Please define mongoDB Url in env file")
+    console.error("MONGODB_URL is not defined. Please check your .env file.");
+    throw new Error("Please define mongoDB Url in env file");
 }
 
 

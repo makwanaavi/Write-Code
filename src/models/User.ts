@@ -12,23 +12,28 @@ export interface IUser {
   updatedAt?: Date;
 }
 
-const userSchema = new mongoose.Schema<IUser> ({
-    name :{ type : String, required : true},
-    email :{ type : String, required : true, unique : true},
-    password : {type : String, required : true, unique : true},
-    picture : {type : String, default:""},
-    refreshToken : { type : String, default : "" }, 
-}, {
-    timestamps : true
-}); 
+const userSchema = new mongoose.Schema<IUser>(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true, unique: true },
+    picture: { type: String, default: "" },
+    refreshToken: { type: String, default: "" },
+  },
+  {
+    timestamps: true,
+  }
+);
 
 userSchema.pre("save", async function (next) {
-    if (this.isModified('password')) {
-        this.password = await bcrypt.hash(this.password, 10)
-    }
-    next()
-})
+  if (this.isModified("password")) {
+    this.password = await bcrypt.hash(this.password, 10);
+  }
+  next();
+});
 
-const UserModel = mongoose.model.User<IUser> || mongoose.model<IUser>("User", userSchema); 
+// Fix OverwriteModelError by checking if model already exists
+const UserModel =
+  mongoose.models.User || mongoose.model<IUser>("User", userSchema);
 
 export default UserModel;

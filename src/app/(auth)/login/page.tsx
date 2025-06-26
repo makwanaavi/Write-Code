@@ -42,20 +42,22 @@ const Login = () => {
     resolver: zodResolver(formSchema),
   });
 
-  const [isLoading] = useState(false);
+  const [isLoading, setLoading] = useState(false);
   const router = useRouter();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const result = await signIn("credential", {
+    setLoading(true);
+    const result = await signIn("credentials", {
       email: values.email,
       password: values.password,
       redirect: false,
     });
+    setLoading(false);
     if (result?.error) {
       toast.error(result?.error);
     } else {
-      router.push("/dashboard");
       toast.success("Login SuccessFully");
+      router.push("/dashboard");
     }
   }
   return (
