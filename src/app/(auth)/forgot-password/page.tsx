@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client";
 import React, { useState } from "react";
 import { z } from "zod";
@@ -15,24 +14,19 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string({ message: "Email is required" }).email().min(5).max(50),
 });
-
 const ForgotPassword = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
-
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
+    setIsLoading(true);
   }
 
   return (
@@ -67,14 +61,14 @@ const ForgotPassword = () => {
             type="submit"
             className="w-full cursor-pointer"
           >
-            {isLoading ? "Loading..." : "Chnage Password"}
+            {isLoading ? "Loading..." : "Chanage Password"}
           </Button>
         </form>
       </Form>
 
       <div className="max-w-md mx-auto">
         <p>
-          Already have account ?{" "}
+          Already have account ?
           <Link href={"/login"} className="text-primary drop-shadow-md">
             Login
           </Link>
