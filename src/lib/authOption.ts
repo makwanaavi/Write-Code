@@ -19,16 +19,18 @@ export const authoptions: NextAuthOptions = {
         }
         try {
           await ConnectDB();
-          const user = UserModel.findOne({ email: credentials.email });
+
+          const user = await UserModel.findOne({ email: credentials.email });
 
           if (!user) {
-            throw new Error("User Not Found with This Email. ");
+            throw new Error("User Not Found with This Email.");
           }
-          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
           const isValidpassword = await bcrypt.compare(
             credentials.password,
             user.password
           );
+
           if (!isValidpassword) {
             throw new Error("Invalid password");
           }
@@ -67,5 +69,5 @@ export const authoptions: NextAuthOptions = {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60,
   },
-  secret : process.env.NEXTAUTH_SECRET
+  secret: process.env.NEXTAUTH_SECRET,
 };

@@ -21,16 +21,9 @@ import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string({ message: "Email is required" }).email().min(5).max(50),
-  password: z
-    .string({ message: "Password is required" })
-    .min(8, { message: "Password must at least 8 characters" })
-    .regex(/[A-z]/, "Password at leat One Uppercase")
-    .regex(/[a-z]/, "Password at least one lowercase")
-    .regex(/[0-9]/, "Password at least one number")
-    .regex(/[@#$%^&*]/, "Password at least one special character"),
 });
 
-const LoginPage = () => {
+const ForgotPassword = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
@@ -40,28 +33,11 @@ const LoginPage = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-    console.log(values.password);
-    console.log(values.email);
-
-    setIsLoading(true);
-    const result = await signIn("credentials", {
-      password: values.password,
-      email: values.email,
-      redirect: false,
-    });
-    setIsLoading(false);
-
-    if (result?.error) {
-      toast.error(result.error);
-    } else {
-      toast.success("Login successfully");
-      router.push("/dashboard");
-    }
   }
 
   return (
     <div className="lg:p-10 space-y-7">
-      <h1 className="text-xl font-semibold text-center">Login</h1>
+      <h1 className="text-xl font-semibold text-center">ForgotPassword</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -85,47 +61,22 @@ const LoginPage = () => {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Password</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Enter your password"
-                    {...field}
-                    disabled={isLoading}
-                    type="password"
-                    value={field.value ?? ""}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="ml-auto w-fit -mt-3">
-            <Link href={"/forgot-password"} className="hover:underline">
-              Forgot Password ?
-            </Link>
-          </div>
 
           <Button
             disabled={isLoading}
             type="submit"
             className="w-full cursor-pointer"
           >
-            {isLoading ? "Loading..." : "Login"}
+            {isLoading ? "Loading..." : "Chnage Password"}
           </Button>
         </form>
       </Form>
 
       <div className="max-w-md mx-auto">
         <p>
-          Don't have account ?{" "}
-          <Link href={"/register"} className="text-primary drop-shadow-md">
-            Create here
+          Already have account ?{" "}
+          <Link href={"/login"} className="text-primary drop-shadow-md">
+            Login
           </Link>
         </p>
       </div>
@@ -133,4 +84,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default ForgotPassword;
