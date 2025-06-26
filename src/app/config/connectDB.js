@@ -33,3 +33,5 @@ export async function ConnectDB() {
         throw error
     }
 }
+
+export default ConnectDB ; 
