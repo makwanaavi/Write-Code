@@ -1,4 +1,4 @@
-/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import React, { useState } from "react";
 import { z } from "zod";
@@ -15,29 +15,43 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { signIn } from "next-auth/react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
+import Axios from "@/lib/Axios";
 
 const formSchema = z.object({
   email: z.string({ message: "Email is required" }).email().min(5).max(50),
 });
-
 const ForgotPassword = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-  }
+    const payload = {
+      email: values.email,
+    };
+    try {
+      setIsLoading(true);
+      const response = await Axios.post("/api/auth/forgot-password", payload);
 
+      if (response.status === 200) {
+        toast.success(response?.data?.message || "Password reset email sent.");
+        form.reset();
+      }
+    } catch (error: any) {
+      toast.error(
+        error?.response?.data?.error || "Something went wrong. Please try again."
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  }
   return (
     <div className="lg:p-10 space-y-7">
-      <h1 className="text-xl font-semibold text-center">ForgotPassword</h1>
+      <h1 className="text-xl font-semibold text-center">Forgot Password</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
@@ -67,7 +81,7 @@ const ForgotPassword = () => {
             type="submit"
             className="w-full cursor-pointer"
           >
-            {isLoading ? "Loading..." : "Chnage Password"}
+            {isLoading ? "Loading..." : "Submit"}
           </Button>
         </form>
       </Form>
@@ -83,5 +97,5 @@ const ForgotPassword = () => {
     </div>
   );
 };
-
 export default ForgotPassword;
+
