@@ -1,5 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
-
+"use client";
 import {
   Sidebar,
   SidebarContent,
@@ -7,13 +6,17 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
+  // SidebarSeparator,
 } from "@/components/ui/sidebar";
-import Logo from "@/components/Logo";
+// import Logo from "@/components/Logo";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
+import { FileIcon } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 // const items = [
 //   {
@@ -44,6 +47,13 @@ import Link from "next/link";
 // ];
 
 const DashboardSidebar = () => {
+  const pathname = usePathname();
+  const resetProject = [
+    {
+      name: "Chat App",
+      link: "/editor/fdfddf",
+    },
+  ];
   return (
     <Sidebar className="overflow-hidden">
       <SidebarHeader className="mx-auto pr-6">
@@ -67,16 +77,36 @@ const DashboardSidebar = () => {
           Create Project
         </Button>
 
-        <div className="px-2">
-            <SidebarMenu>
-                <SidebarMenuItem>
-                    <Link href={'/'}>DashBoard</Link>
-                </SidebarMenuItem>
-            </SidebarMenu>
+        <div className="px-2 w-full">
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <Link
+                href={"/dashboard"}
+                className={cn(
+                  "w-full min-w-full block px-2 rounded-ms p-2",
+                  pathname === "/dashboard" && "bg-white"
+                )}
+              >
+                DashBoard
+              </Link>
+            </SidebarMenuItem>
+          </SidebarMenu>
         </div>
 
         <SidebarGroup>
-            <SidebarGroupLabel>Resent Project</SidebarGroupLabel>
+          <SidebarGroupLabel>Resent Project</SidebarGroupLabel>
+          <SidebarMenu>
+            {resetProject.map((item) => (
+              <SidebarMenuItem key={item.name}>
+                <SidebarMenuButton asChild>
+                  <Link href={item.link}>
+                    <FileIcon />
+                    <span>{item.name}</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
